@@ -1,0 +1,35 @@
+.full {
+  min-height: 75vh; 
+  display: flex;
+  padding: 30px;
+  background-image: url('images/about3.jpg');
+}
+
+.about-container {
+  background-color: #fff; 
+  padding: 50px; 
+  border-radius: 15px; 
+  max-width: 900px; 
+  text-align: justify;
+  margin: 0 auto; 
+  max-height: 600px;
+  padding-top: 0.01%;
+  padding-bottom: 0.1%;
+}
+
+.lato-regular {
+  font-family: Lato, sans-serif; 
+  font-weight: 400; 
+}
+
+h2 {
+  margin-bottom: 20px; 
+  font-size: 2em; 
+  text-align: center;
+}
+
+p {
+  line-height: 1.8; 
+  margin-bottom: 15px; 
+  font-size: 20px;
+}

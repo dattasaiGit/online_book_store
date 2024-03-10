@@ -1,0 +1,15 @@
+.admin-home {
+    background-image: url('images/about3.jpg');
+    background-size: cover;  
+    height: 100vh;  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;  
+  }
+  
+  h1{
+    text-align: justify;
+    margin-right: 100px;
+    margin-left: 100px;
+  }

@@ -1,0 +1,61 @@
+/* AddBooks.css */
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f8f8f8;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .add-book-form {
+    margin-bottom: 20px;
+  }
+  
+  .add-book-form h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+  
+  .add-book-form label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .add-book-form input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .add-book-form button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .add-book-form button:hover {
+    background-color: #0056b3;
+  }
+  
+  .available-books h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+  
+  .available-books ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .available-books li {
+    margin-bottom: 5px;
+  }
+  

@@ -1,0 +1,20 @@
+.home {
+    margin: 0;
+    padding: 0;
+    background-image: url('images/home2.jpg'); 
+    background-size: cover;
+    display: flex;
+    flex-direction: column; 
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-position: center;
+    background-size: 100% 100%;
+    max-height: 95vh;
+  }
+ .home h1{
+    margin-top: -40%;
+  }
+  
+ 
+  
