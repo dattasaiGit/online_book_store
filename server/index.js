@@ -1,7 +1,10 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient } = require('mongodb');
+const { MongoClient, GridFSBucket } = require('mongodb');
 const razorpay = require('razorpay');
+const multer = require('multer');
+const { Readable } = require('stream');
+
 
 const app = express();
 app.use(express.json());
@@ -15,10 +18,41 @@ const bookCol = db.collection('Books');
 const ordersCol = db.collection('Orders');
 const cartCol = db.collection('Cart');
 const salesCol = db.collection('sales'); 
+const feedbackcol = db.collection('Feedback'); 
+const gridFSBucket = new GridFSBucket(db);
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'public/images'); 
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  }
+});
+const upload = multer({ storage });
+
+
 
 app.get('/home', (req, res) => {
   res.send('It is a Home Page');
 });
+
+app.post('/login', async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const user = await col.findOne({ username });
+    if (!user || user.password !== password) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+    res.status(200).json(user);
+    // res.status(200).json({ message: 'Login successful', userRole: user.role }); 
+
+  } catch (error) {
+    console.error('Error during login:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 app.post('/register', async (req, res) => {
   try {
@@ -27,25 +61,8 @@ app.post('/register', async (req, res) => {
     if (existingUser) {
       return res.status(409).json({ error: 'Username already exists' });
     }
-    await col.insertOne({username,email,phoneNumber,password,});
+    await col.insertOne({ username, email, phoneNumber, password });
     res.status(201).json({ message: 'Registration successful' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-app.post('/login', async (req, res) => {
-  try {
-    const { username, password } = req.body;
-
-    const user = await col.findOne({ username });
-
-    if (!user || user.password !== password) {
-      return res.status(401).json({ error: 'Invalid credentials' });
-    }
-
-    res.status(200).json({ message: 'Login successful' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal server error' });
@@ -54,13 +71,13 @@ app.post('/login', async (req, res) => {
 
 app.post('/addbooks', async (req, res) => {
   try {
-    const { title, author, price, genre, quantity } = req.body;
+    const { title, author, price, genre, quantity, imageUrl } = req.body; 
     const existingBook = await bookCol.findOne({ title });
 
     if (existingBook) {
       return res.status(409).json({ error: 'Book already exists' });
     }
-    await bookCol.insertOne({ title, author, price, genre, quantity });
+    await bookCol.insertOne({ title, author, price, genre, quantity, imageUrl }); 
 
     res.status(201).json({ message: 'Book added successfully' });
   } catch (error) {
@@ -68,6 +85,7 @@ app.post('/addbooks', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 
 app.get('/getbooks', async (req, res) => {
   try {
@@ -78,6 +96,7 @@ app.get('/getbooks', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 
 app.post('/addToCart', async (req, res) => {
   try {
@@ -158,6 +177,12 @@ app.delete('/delete', async (req,res)=>{
   res.send("deleted successfully")
 })
 
+app.delete('/deletebook', async (req,res)=>{
+  console.log(req.query.title)
+  await col.deleteOne({name:req.query.title})
+  res.send("deleted successfully")
+})
+
 app.get('/admin/orders', async (req, res) => {
   try {
    const orders = await col.find({}).toArray();
@@ -170,21 +195,24 @@ app.get('/admin/orders', async (req, res) => {
   }
 });
 
-app.post('/changepassword', async (req, res) => {
+app.post('/Changepassword', async (req, res) => {
   try {
     const { username, oldPassword, newPassword } = req.body;
     const user = await col.findOne({ username });
-    if (!user || user.password !== oldPassword) {
-      return res.status(401).json({ error: 'Invalid credentials' });
+    if (!user) {
+      return res.status(401).json({ error: 'User not found' });
+    }
+    if (user.password !== oldPassword) {
+      return res.status(401).json({ error: 'Invalid old password' });
     }
     await col.updateOne({ username }, { $set: { password: newPassword } });
-
     res.status(200).json({ message: 'Password changed successfully' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 
 app.get('/admin/sales', async (req, res) => {
   try {
@@ -205,6 +233,50 @@ app.get('/admin/popular-books', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+app.post('/Feedback', async (req, res) => {
+  const { feedback, email } = req.body;
+  await feedbackcol.insertOne({ email, feedback });
+  console.log('Received feedback:', feedback);
+  console.log('Submitted by:', email);
+  res.send('Feedback submitted successfully!');
+});
+
+const nodemailer = require ("nodemailer")
+
+app.post('/otpsender', (request, response) => {
+  const gmailTransporter = nodemailer.createTransport({
+      service: 'Gmail',
+      auth: {
+          user: 'yaswanthguntha7@gmail.com',
+          pass: 'rohx rnqs cmbp uzxz'
+      }
+  });
+
+  function generateOTP() {
+      return Math.floor(Math.random() * 900000) + 100000;
+  }
+
+  const email = 'ganeshoggu04@gmail.com';
+  const OTP = generateOTP();
+  const otpMap = {};
+
+  const mailOptions = {
+      from: 'yaswanthguntha7@gmail.com.com',
+      to: email,
+      subject: 'Gallery App',
+      html: `<p>OTP Verification for Forget Password</p><p>Your OTP is: <strong>${OTP}</strong></p>`
+  };
+
+  gmailTransporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+          response.status(500).send('Error sending email through Gmail: ' + error.message);
+      } else {
+          otpMap[email] = OTP;
+          response.status(200).json(OTP);
+      }
+  });
+})
 
 app.listen(8081, () => {
   console.log('Server Running on port 8081');

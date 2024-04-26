@@ -1,20 +1,23 @@
-footer {
-    background-color: #343a40;
-    color: #ffffff;
-    padding: 20px 0;
-    text-align: center;
-  }
-  
-  .footer-content {
-    font-size: 14px;
-  }
-  
-  .footer-content a {
-    color: #ffffff;
-    text-decoration: none;
-  }
-  
-  .footer-content a:hover {
-    text-decoration: underline;
-  }
-  
+
+.footer {
+  background-color: #333;
+  padding: 20px;
+  text-align: center;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.social-icons a {
+  margin-right: 10px;
+  color: #fff; 
+  font-size: 20px;
+}
+
+.copy-right {
+  font-size: 16px;
+  color: #fff; 
+}

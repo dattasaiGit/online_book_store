@@ -1,20 +1,137 @@
-.home {
-    margin: 0;
-    padding: 0;
-    background-image: url('images/home2.jpg'); 
-    background-size: cover;
-    display: flex;
-    flex-direction: column; 
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-position: center;
-    background-size: 100% 100%;
-    max-height: 95vh;
-  }
- .home h1{
-    margin-top: -40%;
-  }
-  
- 
-  
+/* Home.css */
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f8f8;
+}
+
+header {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 40px 0;
+}
+
+header h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+header p {
+  font-size: 1.2rem;
+}
+
+.offers {
+  padding: 40px 0;
+  text-align: center;
+}
+
+.offers h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.offers ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.offers li {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+
+
+.new-arrivals h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.new-arrivals {
+  padding: 40px 0;
+  text-align: center; /* Center the text content */
+}
+
+.book-list {
+  list-style: none;
+  padding: 0;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.book-item {
+  width: 250px;
+  margin: 0 20px 20px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center; /* Center text */
+}
+
+.book-item img {
+  max-width: 100%;
+  border-radius: 5px;
+}
+
+.book-item h3 {
+  font-size: 1.5rem;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.book-item p {
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.book-item .price {
+  display: block;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #333;
+  margin-top: 10px;
+}
+
+.container3 {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0px;
+  height: 250px;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.heading {
+  font-size: 1.5rem; 
+  font-weight: bold; 
+  color: #333; 
+  margin-bottom: 10px;
+}
+
+.subheading {
+  font-size: 2.0rem; 
+  font-weight: bold; 
+  color: #333; 
+  margin-bottom: 10px;
+}
+
+.book-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.book-list li {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}

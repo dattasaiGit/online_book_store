@@ -13,6 +13,7 @@ function About() {
         </style>
         <h2 className='lato-regular'><b>About Us</b></h2>
         <div className='text-container'>
+          <center><h2><u>The Ocean of Pages</u></h2></center>
           <p className='lato-regular'>
            Welcome to Our Book Store!<br></br>
 

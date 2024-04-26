@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import Navbar3 from './Navbar3';
+import axios from 'axios';
+import Footer from './Footer';
 
-const Orders = () => {
+const MyOrders = () => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get('http://localhost:8081/admin/orders');
+        const response = await axios.get('http://localhost:8081/getorders'); 
         setOrders(response.data);
       } catch (error) {
         console.error('Error fetching orders:', error);
@@ -21,7 +22,7 @@ const Orders = () => {
   return (
     <div>
       <Navbar3 />
-      <h2>Admin Orders Page</h2>
+      <h2>Orders</h2>
       {orders && orders.length > 0 ? (
         <div>
           {orders.map((order, index) => (
@@ -41,8 +42,9 @@ const Orders = () => {
       ) : (
         <p>No orders found.</p>
       )}
+      <Footer/>
     </div>
   );
 };
 
-export default Orders;
+export default MyOrders;

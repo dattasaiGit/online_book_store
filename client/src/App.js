@@ -12,13 +12,15 @@ import Myorders from './Components/Myorders';
 import Books from './Components/Books';
 import Adminhome from './Components/adminhome';
 import AddBooks from './Components/AddBooks'
-import Users from './Components/Users';
 import Orders from './Components/Orders';
 import Statistics from './Components/Statistics';
 import AdminUsers from './Components/AdminUsers';
 import ChangePassword from './Components/ChangePassword';
 import CustomerHome from './Components/CustomerHome';
-
+import Address from './Components/Address';
+import FeedbackForm from './Components/Feedback';
+import AdminBooks from './Components/AdminBooks'
+ 
 function App() {
   const [cart, setCart] = useState([]);
 
@@ -45,10 +47,13 @@ function App() {
           <Route path="/books" element={<Books />} />
           <Route path="/admin-dashboard" element={<Adminhome />} />
           <Route path="/addbooks" element={<AddBooks />} />
-          <Route path="/users" element={<AdminUsers />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/statistics" element={<Statistics />} />
           <Route path="/CustomerHome" element={<CustomerHome />} />
+          <Route path="/address" element={<Address />} />
+          <Route path="/feedback" element={<FeedbackForm />} />
+          <Route path="/users" element={<AdminUsers />} />
+          <Route path="/adminbooks" element={<AdminBooks />} />
         </Routes>
       </BrowserRouter>
     </div>

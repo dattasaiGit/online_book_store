@@ -3,12 +3,16 @@ import axios from 'axios';
 import './Books.css';
 import Navbar2 from './Navbar2';
 import Cart from './Cart'; 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Footer from './Footer';
 
 const Books = () => {
-  const [, setBooks] = useState([]);
+  const [books, setBooks] = useState([]);
   const [cart, setCart] = useState([]);
- 
-
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedGenre, setSelectedGenre] = useState('');
+  const [selectedRating, setSelectedRating] = useState(0); // State to track selected rating
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -26,45 +30,106 @@ const Books = () => {
   const addToCart = async (book) => {
     try {
       await axios.post('http://localhost:8081/addToCart', { book });
-      
-      setCart([...cart, book]);
+      setCart(prevCart => [...prevCart, book]);
+      toast.success("Added to Cart Successfully!!", {
+        style: {
+          minWidth: '5000px', 
+          minHeight: '20px' 
+        }
+      });
     } catch (error) {
       console.error('Error adding book to cart:', error);
     }
   };
-  
-  const books = [
-    {"source":"./image1.jpg","bookname":"Harry Potter","author":"J.K Rowling","price":899, "genre": "Fantasy", "quantity": 10},
-    {"source":"./image2.jpg","bookname":"Ek Samandar, Mere Andar","author":"Sanjeev Joshi","price":499, "genre": "Drama", "quantity": 15},
-    {"source":"./image3.jpg","bookname":"Come! Let's Run","author":"Ma. Subramanian","price":799, "genre": "Adventure", "quantity": 8},
-    {"source":"./image4.jpg","bookname":"Spare","author":"J. R. Moehringer","price":699, "genre": "Biography", "quantity": 20},
-    {"source":"./image6.jpg","bookname":"An Acceptable Time","author":"Madeleine L'Engle","price":559, "genre": "Poetry", "quantity": 12},
-    {"source":"./image5.jpg","bookname":"Nation Calling","author":"Dr MA Hasan","price":499, "genre": "Historical Fiction", "quantity": 18},
-    {"source":"./image7.png","bookname":"Agatha Chirstie","author":"Narayanan Vaghul","price":759, "genre": "Philosophy", "quantity": 25},
-    {"source":"./image8.jpg","bookname":"Memories Never Die","author":"Dr. Y.S. Rajan","price":829, "genre": "Autobiography", "quantity": 15},
-  ];
-  
+
+  const handleSearch = () => {
+    console.log('Search button clicked');
+  };
+
+  // Function to handle rating
+  const handleRating = async (bookId) => {
+    try {
+      // Perform action to submit rating to backend
+      await axios.post('http://localhost:8081/rateBook', { bookId, rating: selectedRating });
+      toast.success(`Rating ${selectedRating} submitted for book ID: ${bookId}`);
+    } catch (error) {
+      console.error('Error submitting rating:', error);
+    }
+  };
+
+  // Function to handle star click event
+  const handleStarClick = (rating) => {
+    setSelectedRating(rating);
+  };
+
+  const filterBooks = (book) => {
+    return (book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            book.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            book.genre.toLowerCase().includes(searchQuery.toLowerCase())) &&
+           (selectedGenre === '' || book.genre === selectedGenre);
+  };
+
   return (
     <div>
-    <Navbar2/>
-    <div className="books-container">
-    <div className="books-container">
-        {books.map((book) => (
+      <Navbar2/>
+      <div className="books-container">
+        <ToastContainer />
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Search books"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <br></br>
+          <br></br>
+          <button onClick={handleSearch}>Search</button>
+        </div>
+        <br></br>
+        <div className="filter-container">
+          <p>Filter based on genre</p>
+          <select
+            value={selectedGenre}
+            onChange={(e) => setSelectedGenre(e.target.value)}
+            style={{ height: '40px', width: '100px' }}
+          >
+            <option value="" className='filter'>All Genres</option>
+            {books.map(book => (
+              <option key={book._id} value={book.genre}>{book.genre}</option>
+            ))}
+          </select>
+        </div>
+        
+        {books.filter(filterBooks).map((book) => (
           <div key={book._id} className="book-card">
-            <div className='imgtag' style={{justifyContent:"center"}} ><img className="artimg" src={book.source} alt='img_here'/></div>
-            <br></br><p>{book.bookname}</p>
+            <div className='imgtag' style={{justifyContent:"center"}} >
+              <img className="artimg" src={book.imageUrl} alt="img_here" />
+            </div>
+            <br></br>
+            <p><h3>{book.title}</h3></p>
             <p>Author: {book.author}</p>
             <p>Price: Rs.{book.price}</p>
             <p>Quantity: {book.quantity}</p>
-            <p>Genre: {book.genre}</p>
+            <p>Genre: {book.genre}</p><br></br>
             <button onClick={() => addToCart(book)}>Add to Cart</button>
+            <div>
+              {[1, 2, 3, 4, 5].map((star) => (
+                <span 
+                  key={star}
+                  className={star <= selectedRating ? 'star-filled' : 'star-empty'}
+                  onClick={() => handleStarClick(star)} // Updated onClick handler
+                >
+                  &#9733;
+                </span>
+              ))}
+            </div>
+            <button onClick={() => handleRating(book._id)}>Rate</button> {/* Rating button */}
           </div>
-            ) )
-          }
-        </div>
+        ))}
+      </div>
+      <Footer/>
     </div>
-    </div>
-  )
+  );
 };
 
 export default Books;

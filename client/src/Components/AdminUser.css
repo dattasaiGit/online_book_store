@@ -1,4 +1,31 @@
-.delete-user{
-    color: black;
-    background-color: #fff;
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.custom-table th,
+.custom-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.custom-table th {
+  background-color: #f2f2f2;
+}
+
+
+.custom-table td {
+  text-align: left;
+}
+
+.delete {
+  background-color: #333; 
+  color: #fff; 
+  border: none; 
+  padding: 8px 12px;
+  border-radius: 5px; 
+  cursor: pointer; 
+  width: 100px;
+  transition: background-color 0.3s;
 }

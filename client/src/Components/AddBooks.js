@@ -1,16 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import Navbar3 from './Navbar3';
 import './AddBooks.css';
+import Footer from './Footer';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const AddBooks = () => {
-  const [books, setBooks] = useState([]);
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [price, setPrice] = useState('');
-  const [image, setImage] = useState('');
-  const [quantity, setQuantity] = useState('');
-  const [genre, setGenre] = useState(''); 
+  const [books, setBooks] = useState({
+    title:'',
+    author:'',
+    price:'',
+    quantity:'',
+    genre:'',
+    imageUrl: ''
+  });
+
+  const [bookAdded, setBookAdded] = useState(false);
+
+  const handleChange = (e) => {
+    setBooks({...books, [e.target.id]: e.target.value});
+  };
 
   const fetchBooks = async () => {
     try {
@@ -27,13 +38,21 @@ const AddBooks = () => {
 
   const addBook = async () => {
     try {
-      await axios.post('http://localhost:8081/addbooks', { title, author, price, genre, quantity });
+      await axios.post('http://localhost:8081/addbooks', books);
       fetchBooks();
-      setTitle('');
-      setAuthor('');
-      setPrice('');
-      setGenre('');
-      setQuantity('');
+      setBooks({
+        title:'',
+        author:'',
+        price:'',
+        quantity:'',
+        genre:'',
+        imageUrl: '' 
+      });
+      setBookAdded(true); 
+      toast.success("Book Added Successfully!!");
+      setTimeout(() => {
+        setBookAdded(false);
+      }, 300000);
     } catch (error) {
       console.error('Error adding book:', error);
     }
@@ -43,37 +62,32 @@ const AddBooks = () => {
     <div>
       <Navbar3 />
       <div className="container">
+      <ToastContainer />
         <div className="add-book-form">
           <h2>Add a Book (Admin)</h2>
           <label>Title:</label>
-          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
+          <input type="text" id="title" value={books.title} onChange={handleChange} required/>
 
           <label>Author:</label>
-          <input type="text" value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <input type="text" id="author" value={books.author} onChange={handleChange} required/>
 
           <label>Price:</label>
-          <input type="text" value={price} onChange={(e) => setPrice(e.target.value)} />
+          <input type="text" id="price" value={books.price} onChange={handleChange} required/>
 
           <label>Genre:</label>
-          <input type="text" value={genre} onChange={(e) => setGenre(e.target.value)} />
+          <input type="text" id="genre" value={books.genre} onChange={handleChange} required/>
 
           <label>Quantity:</label>
-          <input type="text" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+          <input type="text" id="quantity" value={books.quantity} onChange={handleChange} required/>
 
-          <button onClick={addBook}>Add Book</button>
-        </div>
+          <label>Image Url:</label>
+          <input type="text" id="imageUrl" value={books.imageUrl} onChange={handleChange} required/>
 
-        <div className="available-books">
-          <h2>Available Books</h2>
-          <ul>
-            {books.map((book) => (
-              <li key={book._id}>
-                {book.title} by {book.author} - ${book.price}
-              </li>
-            ))}
-          </ul>
+          <button onClick={addBook}>Add Book</button><br></br>
+          {bookAdded && <p>Book Added Successfully</p>} 
         </div>
       </div>
+      <Footer/>
     </div>
   );
 };

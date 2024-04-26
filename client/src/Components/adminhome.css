@@ -1,10 +1,11 @@
 .admin-home {
-    background-image: url('images/download.jpeg');
-    background-size: cover;  
-    height: 100vh;  
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #fff;  
-  }
-  
+  background-image: url('images/admin1.jpg');
+  background-size: cover; 
+  background-position: center; 
+  height: 90vh; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff; 
+  padding: 10px;
+}
